@@ -1,11 +1,14 @@
 package vn.edu.usth.dbxdemo;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +23,8 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -28,12 +33,13 @@ import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
 import java.text.DateFormat;
 import java.util.List;
 
-public class FilesActivity extends DropboxActivity {
+public class FilesActivity extends DropboxActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = FilesActivity.class.getName();
 
     public final static String EXTRA_PATH = "FilesActivity_Path";
@@ -42,6 +48,10 @@ public class FilesActivity extends DropboxActivity {
     private String mPath;
     private FilesAdapter mFilesAdapter;
     private FileMetadata mSelectedFile;
+
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    Toolbar toolbar;
 
     public static Intent getIntent(Context context, String path) {
         Intent filesIntent = new Intent(context, FilesActivity.class);
@@ -58,8 +68,19 @@ public class FilesActivity extends DropboxActivity {
 
         setContentView(R.layout.activity_files);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.toolbar);
+        //toolbar
         setSupportActionBar(toolbar);
+        //navigation draw menu
+        navigationView.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        //make menu click
+        navigationView.setNavigationItemSelectedListener(this);
 
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +109,15 @@ public class FilesActivity extends DropboxActivity {
 
         mSelectedFile = null;
     }
-
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
     private void launchFilePicker() {
         // Launch intent to pick file for upload
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -323,6 +352,11 @@ public class FilesActivity extends DropboxActivity {
                 action.getPermissions(),
                 action.getCode()
         );
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return true;
     }
 
     private enum FileAction {
