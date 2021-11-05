@@ -42,17 +42,11 @@ public class ConnectActivity extends DropboxActivity {
 
         if (hasToken()) {
             findViewById(R.id.login_button).setVisibility(View.GONE);
-            findViewById(R.id.email_text).setVisibility(View.VISIBLE);
-            findViewById(R.id.name_text).setVisibility(View.VISIBLE);
-            findViewById(R.id.type_text).setVisibility(View.VISIBLE);
             findViewById(R.id.files_button).setVisibility(View.VISIBLE);
             findViewById(R.id.files_button).setEnabled(true);
             Toast.makeText(ConnectActivity.this,"Connect Successfully", Toast.LENGTH_SHORT).show();
         } else {
             findViewById(R.id.login_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.email_text).setVisibility(View.GONE);
-            findViewById(R.id.name_text).setVisibility(View.GONE);
-            findViewById(R.id.type_text).setVisibility(View.GONE);
             findViewById(R.id.files_button).setVisibility(View.GONE);
             findViewById(R.id.files_button).setEnabled(false);
 
@@ -64,9 +58,7 @@ public class ConnectActivity extends DropboxActivity {
         new GetCurrentAccountTask(DropboxClientFactory.getClient(), new GetCurrentAccountTask.Callback() {
             @Override
             public void onComplete(FullAccount result) {
-                ((TextView) findViewById(R.id.email_text)).setText(result.getEmail());
-                ((TextView) findViewById(R.id.name_text)).setText(result.getName().getDisplayName());
-                ((TextView) findViewById(R.id.type_text)).setText(result.getAccountType().name());
+                Log.i("connect", "success");
             }
 
             @Override

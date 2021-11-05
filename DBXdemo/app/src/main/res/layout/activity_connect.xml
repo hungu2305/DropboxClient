@@ -28,27 +28,13 @@
 
         <Button
             android:id="@+id/login_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/round_btn"
             android:textColor="@color/white"
             android:text="Login with Dropbox"
-            android:layout_marginTop="50dp"/>
-        <TextView
-            android:id="@+id/email_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_marginTop="70dp"/>
 
-        <TextView
-            android:id="@+id/name_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-        <TextView
-            android:id="@+id/type_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/files_button"
@@ -57,7 +43,7 @@
             android:background="@drawable/round_btn"
             android:text="View Files"
             android:textColor="@color/white"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="70dp"/>
     </LinearLayout>
 
 </LinearLayout>
