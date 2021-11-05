@@ -27,11 +27,13 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.ListFolderResult;
+import com.dropbox.core.v2.users.FullAccount;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -221,6 +223,20 @@ public class FilesActivity extends DropboxActivity implements NavigationView.OnN
                         .show();
             }
         }).execute(mPath);
+
+        new GetCurrentAccountTask(DropboxClientFactory.getClient(), new GetCurrentAccountTask.Callback() {
+            @Override
+            public void onComplete(FullAccount result) {
+                ((TextView) findViewById(R.id.email)).setText(result.getEmail());
+                ((TextView) findViewById(R.id.name)).setText(result.getName().getDisplayName());
+                ((TextView) findViewById(R.id.type)).setText(result.getAccountType().name());
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e(getClass().getName(), "Failed to get account details.", e);
+            }
+        }).execute();
     }
 
     private void downloadFile(FileMetadata file) {
